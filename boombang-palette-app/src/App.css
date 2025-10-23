@@ -89,9 +89,20 @@ h1 {
 
 .controls {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 0.5rem;
   margin-bottom: 0.75rem;
+}
+
+.controls-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.history-controls {
+  display: flex;
+  gap: 0.25rem;
 }
 
 .btn-primary {
@@ -152,6 +163,30 @@ h1 {
 .btn-favorites:hover {
   background: #262626;
   border-color: #fbbf24;
+}
+
+.btn-history {
+  background: #1a1a1a;
+  color: #999;
+  border: 1px solid #2a2a2a;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex: 1;
+}
+
+.btn-history:hover:not(:disabled) {
+  background: #262626;
+  color: #6366f1;
+  border-color: #6366f1;
+}
+
+.btn-history:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
 }
 
 .palette-count {

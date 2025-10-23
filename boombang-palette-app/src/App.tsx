@@ -27,6 +27,8 @@ function App() {
   const [usedPaletteIndices, setUsedPaletteIndices] = useState<Set<number>>(new Set());
   const [favorites, setFavorites] = useState<ColorPalette[]>([]);
   const [showFavorites, setShowFavorites] = useState(false);
+  const [paletteHistory, setPaletteHistory] = useState<ColorPalette[]>([]);
+  const [historyIndex, setHistoryIndex] = useState(-1);
 
   useEffect(() => {
     loadPalettes();
@@ -75,34 +77,60 @@ function App() {
 
   const generateRandomPalette = () => {
     if (palettes.length === 0) return;
-    
+
     // If all palettes have been used, reset the used list
     if (usedPaletteIndices.size >= palettes.length) {
       setUsedPaletteIndices(new Set());
     }
-    
+
     // Find unused palette indices
     const availableIndices = palettes
       .map((_, index) => index)
       .filter(index => !usedPaletteIndices.has(index));
-    
+
+    let newPalette: ColorPalette;
     if (availableIndices.length === 0) {
       // This shouldn't happen due to the reset above, but just in case
       setUsedPaletteIndices(new Set());
       const randomIndex = Math.floor(Math.random() * palettes.length);
-      setCurrentPalette(palettes[randomIndex]);
+      newPalette = palettes[randomIndex];
       setUsedPaletteIndices(new Set([randomIndex]));
     } else {
       // Pick a random unused palette
       const randomAvailableIndex = Math.floor(Math.random() * availableIndices.length);
       const selectedIndex = availableIndices[randomAvailableIndex];
-      
-      setCurrentPalette(palettes[selectedIndex]);
+
+      newPalette = palettes[selectedIndex];
       setUsedPaletteIndices(prev => new Set([...prev, selectedIndex]));
     }
-    
+
+    // Add to history
+    const newHistory = paletteHistory.slice(0, historyIndex + 1);
+    newHistory.push(newPalette);
+    setPaletteHistory(newHistory);
+    setHistoryIndex(newHistory.length - 1);
+
+    setCurrentPalette(newPalette);
     setAppliedColors(new Set());
     setStatus(`Palette ${usedPaletteIndices.size + 1}/${palettes.length}`);
+  };
+
+  const goToPreviousPalette = () => {
+    if (historyIndex > 0) {
+      const newIndex = historyIndex - 1;
+      setHistoryIndex(newIndex);
+      setCurrentPalette(paletteHistory[newIndex]);
+      setAppliedColors(new Set());
+    }
+  };
+
+  const goToNextPalette = () => {
+    if (historyIndex < paletteHistory.length - 1) {
+      const newIndex = historyIndex + 1;
+      setHistoryIndex(newIndex);
+      setCurrentPalette(paletteHistory[newIndex]);
+      setAppliedColors(new Set());
+    }
   };
 
   const startCalibration = async () => {
@@ -273,26 +301,46 @@ function App() {
       ) : (
         <>
           <div className="controls">
-            <button
-              className="btn-primary"
-              onClick={generateRandomPalette}
-              disabled={palettes.length === 0 || !calibrated}
-            >
-              Generate New Palette
-            </button>
-            <button
-              className="btn-secondary"
-              onClick={startCalibration}
-              disabled={calibrating}
-            >
-              {calibrating ? 'Calibrating...' : (calibrated ? 'Recalibrate' : 'Calibrate')}
-            </button>
-            <button
-              className="btn-favorites"
-              onClick={() => setShowFavorites(!showFavorites)}
-            >
-              ★ Favorites ({favorites.length})
-            </button>
+            <div className="controls-row">
+              <button
+                className="btn-primary"
+                onClick={generateRandomPalette}
+                disabled={palettes.length === 0 || !calibrated}
+              >
+                Generate New Palette
+              </button>
+              <button
+                className="btn-secondary"
+                onClick={startCalibration}
+                disabled={calibrating}
+              >
+                {calibrating ? 'Calibrating...' : (calibrated ? 'Recalibrate' : 'Calibrate')}
+              </button>
+              <button
+                className="btn-favorites"
+                onClick={() => setShowFavorites(!showFavorites)}
+              >
+                ★ Favorites ({favorites.length})
+              </button>
+            </div>
+            <div className="history-controls">
+              <button
+                className="btn-history"
+                onClick={goToPreviousPalette}
+                disabled={historyIndex <= 0}
+                title="Previous palette"
+              >
+                ←
+              </button>
+              <button
+                className="btn-history"
+                onClick={goToNextPalette}
+                disabled={historyIndex >= paletteHistory.length - 1}
+                title="Next palette"
+              >
+                →
+              </button>
+            </div>
           </div>
 
           {showFavorites && (

@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-apply-color-to-game"
+description = "Enables the apply_color_to_game command without any pre-configured scope."
+commands.allow = ["apply_color_to_game"]
+
+[[permission]]
+identifier = "deny-apply-color-to-game"
+description = "Denies the apply_color_to_game command without any pre-configured scope."
+commands.deny = ["apply_color_to_game"]

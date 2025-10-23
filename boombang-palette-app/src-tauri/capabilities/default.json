@@ -1,0 +1,19 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Default capabilities for BoomBang Color Palette app - Minimal permissions for security",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "core:window:default",
+    "core:window:allow-set-title",
+    "core:window:allow-close",
+    "core:window:allow-minimize",
+    "shell:default",
+    "allow-load-palettes",
+    "allow-save-calibration",
+    "allow-get-calibration",
+    "allow-get-mouse-position",
+    "allow-apply-color-to-game"
+  ]
+}

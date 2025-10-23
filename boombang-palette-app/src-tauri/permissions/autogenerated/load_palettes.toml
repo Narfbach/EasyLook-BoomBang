@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-load-palettes"
+description = "Enables the load_palettes command without any pre-configured scope."
+commands.allow = ["load_palettes"]
+
+[[permission]]
+identifier = "deny-load-palettes"
+description = "Denies the load_palettes command without any pre-configured scope."
+commands.deny = ["load_palettes"]

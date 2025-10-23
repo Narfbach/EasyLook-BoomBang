@@ -1,0 +1,62 @@
+name: Build and Release
+
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        
+    - name: Setup Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        override: true
+        
+    - name: Install dependencies
+      working-directory: ./boombang-palette-app
+      run: npm install
+      
+    - name: Build Tauri app
+      working-directory: ./boombang-palette-app
+      run: npm run tauri build
+      
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: BoomBang-Palette-Installer
+        path: |
+          boombang-palette-app/src-tauri/target/release/bundle/nsis/*.exe
+          boombang-palette-app/src-tauri/target/release/*.exe
+          
+  release:
+    needs: build
+    runs-on: windows-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    
+    steps:
+    - name: Download artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: BoomBang-Palette-Installer
+        
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          **/*.exe
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

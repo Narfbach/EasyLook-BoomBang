@@ -330,7 +330,7 @@ function App() {
                 disabled={historyIndex <= 0}
                 title="Previous palette"
               >
-                ←
+                ◄ Back
               </button>
               <button
                 className="btn-history"
@@ -338,7 +338,7 @@ function App() {
                 disabled={historyIndex >= paletteHistory.length - 1}
                 title="Next palette"
               >
-                →
+                Next ►
               </button>
             </div>
           </div>

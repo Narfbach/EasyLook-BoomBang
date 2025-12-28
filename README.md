@@ -1,6 +1,6 @@
 # BoomBang Color Palette Generator v3.0
 
-Generador profesional de paletas de colores con **500+ paletas profesionales** que se integra directamente con el juego BoomBang. Construido con Tauri + React + Rust para rendimiento nativo.
+Generador profesional de paletas de colores con **500+ paletas** que se integra directamente con el juego BoomBang. Construido con Tauri + React + Rust para rendimiento nativo.
 
 ![Version](https://img.shields.io/badge/version-3.0.0-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows-lightgrey)
@@ -166,3 +166,5 @@ color-picker/
 ---
 
 **Versión 3.0.0** - Generador Profesional de Paletas de Colores | Tauri + React + Rust
+
+Made with love <3 - Fran
